@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Anni Atawani | Interactive CV</title>
+  <style>
+    :root {
+      --bg: #070914;
+      --bg-soft: rgba(10, 15, 31, 0.72);
+      --panel: rgba(12, 20, 38, 0.78);
+      --border: rgba(116, 189, 255, 0.2);
+      --text: #f5f7fb;
+      --muted: #b7c3d9;
+      --accent: #7c5cff;
+      --accent-2: #13c6ff;
+      --accent-3: #ff8a3d;
+      --shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      color: var(--text);
+      background: radial-gradient(circle at top, #101a38 0%, #070914 55%, #04050b 100%);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    #bg {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+    }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background:
+        radial-gradient(circle at 15% 20%, rgba(124, 92, 255, 0.18), transparent 30%),
+        radial-gradient(circle at 80% 25%, rgba(19, 198, 255, 0.16), transparent 28%),
+        radial-gradient(circle at 55% 80%, rgba(255, 138, 61, 0.08), transparent 22%);
+      pointer-events: none;
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 24px;
+      backdrop-filter: blur(14px);
+      background: rgba(7, 9, 20, 0.55);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .brand {
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .nav a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.95rem;
+    }
+
+    .nav a:hover { color: var(--accent-2); }
+
+    .hero {
+      min-height: 92vh;
+      display: grid;
+      place-items: center;
+      padding: 80px 24px 40px;
+    }
+
+    .hero-card {
+      width: min(1100px, 100%);
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 24px;
+      background: var(--bg-soft);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      padding: 34px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .eyebrow {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: rgba(19, 198, 255, 0.12);
+      color: #a8ebff;
+      border: 1px solid rgba(19, 198, 255, 0.25);
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0 0 14px;
+      font-size: clamp(2.6rem, 6vw, 5.4rem);
+      line-height: 0.95;
+    }
+
+    .gradient-text {
+      background: linear-gradient(90deg, #ffffff 0%, #9bdcff 35%, #b993ff 65%, #ffb17c 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      max-width: 60ch;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 26px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 0 18px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 700;
+      transition: transform 0.25s ease, background 0.25s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      color: white;
+    }
+
+    .btn-secondary {
+      color: white;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.04);
+    }
+
+    .btn:hover { transform: translateY(-2px); }
+
+    .stats {
+      display: grid;
+      gap: 14px;
+      align-content: start;
+    }
+
+    .stat-card, .panel {
+      background: var(--panel);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 22px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+
+    .stat-card strong {
+      display: block;
+      font-size: 2rem;
+      color: white;
+    }
+
+    .stat-card span,
+    .panel p,
+    .panel li,
+    .timeline p,
+    .timeline li,
+    .contact-card li {
+      color: var(--muted);
+    }
+
+    .section {
+      width: min(1100px, calc(100% - 32px));
+      margin: 0 auto 24px;
+      padding: 18px 0;
+    }
+
+    .section-grid {
+      display: grid;
+      grid-template-columns: 0.95fr 1.05fr;
+      gap: 24px;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      margin: 0 0 14px;
+    }
+
+    .skills-list,
+    .contact-card ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .skills-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .skills-list li {
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(124, 92, 255, 0.12);
+      border: 1px solid rgba(124, 92, 255, 0.22);
+      color: #ebe4ff;
+      font-size: 0.94rem;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 16px;
+    }
+
+    .timeline article {
+      position: relative;
+      padding-left: 20px;
+      border-left: 2px solid rgba(19, 198, 255, 0.22);
+    }
+
+    .timeline article::before {
+      content: "";
+      position: absolute;
+      left: -7px;
+      top: 8px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: linear-gradient(180deg, var(--accent-2), var(--accent));
+      box-shadow: 0 0 18px rgba(19, 198, 255, 0.65);
+    }
+
+    .timeline h3 {
+      margin: 0 0 6px;
+      font-size: 1.15rem;
+    }
+
+    .timeline ul {
+      margin: 10px 0 0 18px;
+      padding: 0;
+    }
+
+    .contact-card li {
+      margin-bottom: 12px;
+    }
+
+    .contact-card a {
+      color: #9bdcff;
+      text-decoration: none;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 30px 20px 50px;
+      color: rgba(255,255,255,0.66);
+    }
+
+    @media (max-width: 860px) {
+      .hero-card,
+      .section-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .nav {
+        padding: 14px 16px;
+      }
+
+      .nav-links {
+        gap: 10px;
+      }
+
+      .hero-card {
+        padding: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="bg" aria-hidden="true"></canvas>
+  <div class="overlay"></div>
+
+  <header class="nav">
+    <div class="brand">Anni Atawani</div>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#profile">Profile</a>
+      <a href="#experience">Experience</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="hero-card">
+      <div>
+        <span class="eyebrow">Interactive CV</span>
+        <h1><span class="gradient-text">XR Creative Developer</span><br>Web Designer · Digital Marketer</h1>
+        <p>
+          Junior XR Creative Developer, web designer, and digital marketer with hands-on experience in immersive technology, website production, content creation, and Meta-focused digital marketing.
+        </p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="#experience">Explore Experience</a>
+          <a class="btn btn-secondary" href="mailto:anni@atawani.com">Contact Me</a>
+        </div>
+      </div>
+
+      <div class="stats">
+        <div class="stat-card">
+          <strong>XR / Web / AI</strong>
+          <span>Creative technology across immersive experiences, websites, and digital products.</span>
+        </div>
+        <div class="stat-card">
+          <strong>2025–2026</strong>
+          <span>Experience in XR internship work, freelance web design, and collaborative prototype projects.</span>
+        </div>
+        <div class="stat-card">
+          <strong>Hyper Island</strong>
+          <span>Professional training in XR Creative Development and digital marketing.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="profile">
+    <div class="section-grid">
+      <div class="panel">
+        <h2>Profile</h2>
+        <p>Skilled in HTML, CSS, JavaScript, Unity, GitHub, and collaborative project delivery. Built concepts such as an interactive AR business card, an AI personal assistant, and immersive art experiences exploring blended reality and visual storytelling.</p>
+      </div>
+      <div class="panel">
+        <h2>Education</h2>
+        <p><strong>XR Creative Developer</strong><br>Hyper Island, Stockholm<br>Professional Certificate, 2026</p>
+        <p><strong>Professional Certificate in Digital Marketing</strong><br>Completed in 2026</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="experience">
+    <div class="panel">
+      <h2>Experience & Selected Projects</h2>
+      <div class="timeline">
+        <article>
+          <h3>XR Creative Developer Intern</h3>
+          <p><strong>Epicenter Stockholm, Stockholm</strong> | 2025–2026</p>
+          <ul>
+            <li>Created an interactive AR Business Card concept to make professional networking more engaging through digital content.</li>
+            <li>Built an AI Personal Assistant concept demonstrating practical AI integration into digital products.</li>
+            <li>Developed an immersive art project exploring blended-reality experiences and interactive visual storytelling.</li>
+          </ul>
+        </article>
+
+        <article>
+          <h3>Freelance Web Designer / Digital Creative</h3>
+          <p><strong>Self-employed / Upwork | Remote</strong> | 2025–2026</p>
+          <ul>
+            <li>Designed and built websites and digital content for online presence and user engagement.</li>
+          </ul>
+        </article>
+
+        <article>
+          <h3>XR and Interactive Projects</h3>
+          <p><strong>XRCC & Immersive Sweden Competition, team projects</strong> | 2025–2026</p>
+          <ul>
+            <li>Developed an immersive art project exploring blended-reality experiences and interactive visual storytelling.</li>
+            <li>Collaborated with a multidisciplinary team to develop a VR concept that uses AI to help users solve a Rubik’s Cube.</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="skills">
+    <div class="section-grid">
+      <div class="panel">
+        <h2>Skills</h2>
+        <ul class="skills-list">
+          <li>XR Creative Development</li>
+          <li>Unity</li>
+          <li>AI Avatar Integration</li>
+          <li>Mobile Apps</li>
+          <li>API</li>
+          <li>Web Design</li>
+          <li>HTML, CSS, C#, JavaScript</li>
+          <li>Digital Marketing</li>
+          <li>Meta Ads / Social Media</li>
+          <li>Content Creation</li>
+          <li>Team Collaboration</li>
+          <li>Creative Problem Solving</li>
+          <li>GitHub</li>
+          <li>Visual Studio Code</li>
+          <li>Meta Ads Manager</li>
+        </ul>
+      </div>
+
+      <div class="panel contact-card" id="contact">
+        <h2>Contact</h2>
+        <ul>
+          <li>Email: <a href="mailto:anni@atawani.com">anni@atawani.com</a></li>
+          <li>Phone: <a href="tel:+46793488515">+46 793 488 515</a></li>
+          <li>Address: Rosenborgsgatan 9A, 15240 Södertälje, Sweden</li>
+          <li>LinkedIn: <a href="https://www.linkedin.com/in/anni-atawani-5348a7349" target="_blank" rel="noopener noreferrer">linkedin.com/in/anni-atawani-5348a7349</a></li>
+          <li><em>References available upon request.</em></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    Built as an interactive GitHub-ready CV experience.
+  </footer>
+
+  <script type="module">
+    import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
+
+    const canvas = document.getElementById('bg');
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setSize(window.innerWidth, window.innerHeight);
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
+    camera.position.z = 11;
+
+    const ambient = new THREE.AmbientLight(0xffffff, 0.9);
+    scene.add(ambient);
+
+    const pointA = new THREE.PointLight(0x7c5cff, 22, 40);
+    pointA.position.set(6, 5, 8);
+    scene.add(pointA);
+
+    const pointB = new THREE.PointLight(0x13c6ff, 18, 36);
+    pointB.position.set(-6, -3, 6);
+    scene.add(pointB);
+
+    const pointC = new THREE.PointLight(0xff8a3d, 12, 28);
+    pointC.position.set(0, 6, -2);
+    scene.add(pointC);
+
+    const group = new THREE.Group();
+    scene.add(group);
+
+    const geometry = new THREE.IcosahedronGeometry(0.22, 0);
+    const material = new THREE.MeshStandardMaterial({
+      color: 0x9bbcff,
+      emissive: 0x2f4fff,
+      emissiveIntensity: 0.55,
+      metalness: 0.2,
+      roughness: 0.3
+    });
+
+    const particles = [];
+    for (let i = 0; i < 90; i++) {
+      const mesh = new THREE.Mesh(geometry, material.clone());
+      const radius = 4 + Math.random() * 7;
+      const angle = Math.random() * Math.PI * 2;
+      const y = (Math.random() - 0.5) * 8;
+      mesh.position.set(Math.cos(angle) * radius, y, (Math.random() - 0.5) * 8);
+      mesh.scale.setScalar(0.5 + Math.random() * 1.8);
+      mesh.material.color.setHSL(0.55 + Math.random() * 0.18, 0.9, 0.65);
+      mesh.material.emissive.set(mesh.material.color);
+      group.add(mesh);
+      particles.push({
+        mesh,
+        radius,
+        angle,
+        speed: 0.0015 + Math.random() * 0.004,
+        drift: (Math.random() - 0.5) * 0.003
+      });
+    }
+
+    const mouse = { x: 0, y: 0 };
+    window.addEventListener('pointermove', (event) => {
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = (event.clientY / window.innerHeight) * 2 - 1;
+    });
+
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    });
+
+    const clock = new THREE.Clock();
+    function animate() {
+      const elapsed = clock.getElapsedTime();
+      group.rotation.y += 0.0012;
+      group.rotation.x = mouse.y * 0.12;
+
+      particles.forEach((particle, index) => {
+        particle.angle += particle.speed;
+        particle.mesh.position.x = Math.cos(particle.angle + index * 0.03) * particle.radius + mouse.x * 0.7;
+        particle.mesh.position.z = Math.sin(particle.angle + index * 0.02) * particle.radius * 0.75;
+        particle.mesh.position.y += Math.sin(elapsed + index) * 0.002 + particle.drift;
+        if (particle.mesh.position.y > 4.8) particle.mesh.position.y = -4.8;
+        if (particle.mesh.position.y < -4.8) particle.mesh.position.y = 4.8;
+        particle.mesh.rotation.x += 0.01;
+        particle.mesh.rotation.y += 0.008;
+      });
+
+      camera.position.x += (mouse.x * 0.8 - camera.position.x) * 0.03;
+      camera.position.y += (-mouse.y * 0.55 - camera.position.y) * 0.03;
+      camera.lookAt(scene.position);
+      renderer.render(scene, camera);
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+  </script>
+</body>
+</html>
